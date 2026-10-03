@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Biológia Quiz 2026</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+
+    background:
+        radial-gradient(circle at 10% 10%, #dff5e9, transparent 35%),
+        radial-gradient(circle at 90% 90%, #e7f1eb, transparent 35%),
+        #f4f7f5;
+
+    color: #17261f;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+.app {
+    width: 100%;
+    max-width: 650px;
+}
+
+/* =====================
+   OBRAZOVKY
+===================== */
+
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* =====================
+   ÚVOD
+===================== */
+
+.start {
+    background: rgba(255,255,255,0.9);
+
+    border-radius: 32px;
+
+    padding: 50px 35px;
+
+    text-align: center;
+
+    box-shadow: 0 25px 70px rgba(20,37,29,0.12);
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 25px;
+
+    background: #dff5e9;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 40px;
+}
+
+.edition {
+    color: #168657;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 12px;
+}
+
+h1 {
+    font-size: clamp(50px, 12vw, 76px);
+
+    line-height: 0.95;
+
+    letter-spacing: -4px;
+
+    margin-bottom: 25px;
+}
+
+h1 span {
+    color: #168657;
+}
+
+.description {
+    color: #7b8982;
+
+    line-height: 1.6;
+
+    margin-bottom: 30px;
+}
+
+.info {
+    display: grid;
+
+    grid-template-columns: repeat(3,1fr);
+
+    gap: 10px;
+
+    margin-bottom: 30px;
+}
+
+.info div {
+    background: #f5f8f6;
+
+    border: 1px solid #e3e9e5;
+
+    border-radius: 18px;
+
+    padding: 18px 8px;
+}
+
+.info strong {
+    display: block;
+
+    font-size: 21px;
+
+    margin-bottom: 5px;
+}
+
+.info span {
+    color: #7b8982;
+
+    font-size: 12px;
+}
+
+.main-button {
+    width: 100%;
+
+    padding: 18px;
+
+    border: none;
+
+    border-radius: 17px;
+
+    background: #14251d;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.main-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 12px 25px rgba(20,37,29,0.2);
+}
+
+.footer {
+    color: #a0aaa5;
+
+    font-size: 12px;
+
+    margin-top: 25px;
+}
+
+
+/* =====================
+   KVÍZ
+===================== */
+
+.quiz {
+    background: white;
+
+    border-radius: 30px;
+
+    padding: 30px;
+
+    box-shadow: 0 25px 70px rgba(20,37,29,0.12);
+}
+
+.header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.header small {
+    color: #168657;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.header h2 {
+    margin-top: 5px;
+
+    font-size: 20px;
+}
+
+.score {
+    text-align: right;
+}
+
+.score span {
+    display: block;
+
+    color: #89958f;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+}
+
+.score strong {
+    color: #168657;
+
+    font-size: 25px;
+}
+
+.progress {
+    width: 100%;
+
+    height: 7px;
+
+    background: #edf1ee;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    height: 100%;
+
+    width: 10%;
+
+    background: #168657;
+
+    transition: width 0.3s;
+}
+
+.question-label {
+    color: #168657;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 12px;
+}
+
+.question {
+    font-size: clamp(25px,6vw,35px);
+
+    line-height: 1.2;
+
+    letter-spacing: -1px;
+
+    margin-bottom: 25px;
+}
+
+
+/* =====================
+   ODPOVEDE
+===================== */
+
+.answers {
+    display: grid;
+
+    gap: 12px;
+}
+
+.answer {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    text-align: left;
+
+    padding: 16px;
+
+    border: 2px solid #e3e9e5;
+
+    border-radius: 17px;
+
+    background: white;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.answer:hover {
+    border-color: #168657;
+
+    transform: translateX(3px);
+}
+
+.letter {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 11px;
+
+    background: #f0f4f1;
+
+    font-weight: 800;
+}
+
+.answer.correct {
+    background: #e1f6e9;
+
+    border-color: #249b67;
+}
+
+.answer.wrong {
+    background: #fde9e9;
+
+    border-color: #d85c5c;
+}
+
+.answer.disabled {
+    cursor: default;
+}
+
+
+/* =====================
+   ĎALŠIA OTÁZKA
+===================== */
+
+.next {
+    width: 100%;
+
+    margin-top: 18px;
+
+    padding: 17px;
+
+    border: none;
+
+    border-radius: 16px;
+
+    background: #14251d;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    opacity: 0.35;
+}
+
+.next.active {
+    opacity: 1;
+}
+
+
+/* =====================
+   VÝSLEDOK
+===================== */
+
+.result {
+    background: white;
+
+    border-radius: 32px;
+
+    padding: 50px 30px;
+
+    text-align: center;
+
+    box-shadow: 0 25px 70px rgba(20,37,29,0.12);
+}
+
+.result-icon {
+    font-size: 60px;
+
+    margin-bottom: 20px;
+}
+
+.result h1 {
+    font-size: 55px;
+
+    letter-spacing: -3px;
+}
+
+.final-score {
+    background: #dff5e9;
+
+    border-radius: 25px;
+
+    padding: 25px;
+
+    margin: 25px 0;
+}
+
+.final-score strong {
+    display: block;
+
+    font-size: 50px;
+}
+
+.final-score span {
+    color: #7b8982;
+}
+
+.message {
+    color: #7b8982;
+
+    line-height: 1.6;
+
+    margin-bottom: 30px;
+}
+
+
+/* =====================
+   MOBIL
+===================== */
+
+@media (max-width: 500px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .start,
+    .result {
+        padding: 40px 22px;
+    }
+
+    .quiz {
+        padding: 22px;
+    }
+
+    h1 {
+        font-size: 55px;
+    }
+
+    .question {
+        font-size: 27px;
+    }
+
+    .answer {
+        font-size: 14px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+<!-- =====================
+     ÚVODNÁ STRANA
+===================== -->
+
+<section id="startScreen" class="screen active start">
+
+    <div class="logo">🧬</div>
+
+    <div class="edition">
+        2026 EDITION
+    </div>
+
+    <h1>
+        Biológia<br>
+        <span>QUIZ</span>
+    </h1>
+
+    <p class="description">
+        Otestuj svoje znalosti z biológie.
+        Čaká ťa 10 otázok a pri každej štyri možnosti.
+    </p>
+
+    <div class="info">
+
+        <div>
+            <strong>10</strong>
+            <span>Otázok</span>
+        </div>
+
+        <div>
+            <strong>A–D</strong>
+            <span>Možnosti</span>
+        </div>
+
+        <div>
+            <strong>∞</strong>
+            <span>Opakovaní</span>
+        </div>
+
+    </div>
+
+    <button class="main-button" onclick="startQuiz()">
+        Začať kvíz →
+    </button>
+
+    <p class="footer">
+        Biológia • Učenie • Zábava
+    </p>
+
+</section>
+
+
+<!-- =====================
+     KVÍZ
+===================== -->
+
+<section id="quizScreen" class="screen quiz">
+
+    <div class="header">
+
+        <div>
+            <small>BIOLÓGIA QUIZ</small>
+
+            <h2 id="questionNumber">
+                Otázka 1 / 10
+            </h2>
+        </div>
+
+        <div class="score">
+
+            <span>SKÓRE</span>
+
+            <strong id="score">
+                0
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="progress">
+
+        <div
+            id="progressBar"
+            class="progress-bar">
+        </div>
+
+    </div>
+
+
+    <div class="question-label">
+        OTÁZKA
+    </div>
+
+    <h2
+        id="question"
+        class="question">
+    </h2>
+
+
+    <div
+        id="answers"
+        class="answers">
+    </div>
+
+
+    <button
+        id="nextButton"
+        class="next"
+        onclick="nextQuestion()">
+
+        Ďalšia otázka →
+
+    </button>
+
+</section>
+
+
+<!-- =====================
+     VÝSLEDOK
+===================== -->
+
+<section id="resultScreen" class="screen result">
+
+    <div class="result-icon">
+        🧬
+    </div>
+
+    <div class="edition">
+        KVÍZ DOKONČENÝ
+    </div>
+
+    <h1>
+        Výsledok
+    </h1>
+
+    <div class="final-score">
+
+        <strong id="finalScore">
+            0 / 10
+        </strong>
+
+        <span>
+            správnych odpovedí
+        </span>
+
+    </div>
+
+    <p
+        id="message"
+        class="message">
+    </p>
+
+    <button
+        class="main-button"
+        onclick="restartQuiz()">
+
+        Skúsiť znova ↻
+
+    </button>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* =========================
+   OTÁZKY
+========================= */
+
+const questions = [
+
+    {
+        question: "Ktorá základná jednotka tvorí všetky živé organizmy?",
+        answers: [
+            "Orgán",
+            "Bunka",
+            "Tkanivo",
+            "Sústava orgánov"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Ktorý orgán je hlavnou pumpou krvného obehu?",
+        answers: [
+            "Pľúca",
+            "Pečeň",
+            "Srdce",
+            "Oblička"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Ako sa po latinsky označuje lebka?",
+        answers: [
+            "Cranium",
+            "Thorax",
+            "Pelvis",
+            "Femur"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Ktoré tkanivo pokrýva povrch tela a vystiela niektoré vnútorné dutiny a orgány?",
+        answers: [
+            "Svalové tkanivo",
+            "Nervové tkanivo",
+            "Spojivové tkanivo",
+            "Epitelové tkanivo"
+        ],
+        correct: 3
+    },
+
+    {
+        question: "Ktorá časť bunky obsahuje genetickú informáciu vo forme DNA?",
+        answers: [
+            "Bunková stena",
+            "Jadro",
+            "Ribozóm",
+            "Vakuola"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Koľko komôr má ľudské srdce?",
+        answers: [
+            "Dve",
+            "Tri",
+            "Štyri",
+            "Šesť"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Ktorý orgán je hlavným orgánom dýchacej sústavy?",
+        answers: [
+            "Žalúdok",
+            "Pľúca",
+            "Pečeň",
+            "Obličky"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Ktorá kosť je najdlhšia kosť ľudského tela?",
+        answers: [
+            "Stehenná kosť",
+            "Lopatka",
+            "Kľúčna kosť",
+            "Lakteová kosť"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Ktorý zmyslový orgán je zodpovedný za videnie?",
+        answers: [
+            "Ucho",
+            "Nos",
+            "Oko",
+            "Jazyk"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Z čoho sa skladá krv?",
+        answers: [
+            "Iba z červených krviniek",
+            "Iba z plazmy",
+            "Z kostí a svalov",
+            "Z plazmy a krvných elementov"
+        ],
+        correct: 3
+    }
+
+];
+
+
+/* =========================
+   PREMENNÉ
+========================= */
+
+let currentQuestion = 0;
+
+let score = 0;
+
+let answered = false;
+
+
+/* =========================
+   ELEMENTY
+========================= */
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const quizScreen =
+    document.getElementById("quizScreen");
+
+const resultScreen =
+    document.getElementById("resultScreen");
+
+const questionNumber =
+    document.getElementById("questionNumber");
+
+const question =
+    document.getElementById("question");
+
+const answers =
+    document.getElementById("answers");
+
+const scoreElement =
+    document.getElementById("score");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const nextButton =
+    document.getElementById("nextButton");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+const message =
+    document.getElementById("message");
+
+
+/* =========================
+   SPUSTIŤ KVÍZ
+========================= */
+
+function startQuiz() {
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    scoreElement.textContent = "0";
+
+    startScreen.classList.remove("active");
+
+    resultScreen.classList.remove("active");
+
+    quizScreen.classList.add("active");
+
+    showQuestion();
+}
+
+
+/* =========================
+   ZOBRAZIŤ OTÁZKU
+========================= */
+
+function showQuestion() {
+
+    answered = false;
+
+    nextButton.classList.remove("active");
+
+    nextButton.disabled = true;
+
+    nextButton.textContent =
+        "Ďalšia otázka →";
+
+
+    const q =
+        questions[currentQuestion];
+
+
+    questionNumber.textContent =
+        `Otázka ${currentQuestion + 1} / ${questions.length}`;
+
+
+    question.textContent =
+        q.question;
+
+
+    progressBar.style.width =
+        `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+
+    answers.innerHTML = "";
+
+
+    q.answers.forEach((answer, index) => {
+
+        const button =
+            document.createElement("button");
+
+        button.className = "answer";
+
+
+        button.innerHTML = `
+            <span class="letter">
+                ${String.fromCharCode(65 + index)}
+            </span>
+
+            <span>
+                ${answer}
+            </span>
+        `;
+
+
+        button.onclick = function() {
+
+            selectAnswer(index);
+
+        };
+
+
+        answers.appendChild(button);
+
+    });
+
+}
+
+
+/* =========================
+   VYBRAŤ ODPOVEĎ
+========================= */
+
+function selectAnswer(selected) {
+
+    if (answered) {
+        return;
+    }
+
+    answered = true;
+
+
+    const correct =
+        questions[currentQuestion].correct;
+
+
+    const buttons =
+        document.querySelectorAll(".answer");
+
+
+    buttons.forEach(button => {
+
+        button.classList.add("disabled");
+
+    });
+
+
+    if (selected === correct) {
+
+        buttons[selected]
+            .classList.add("correct");
+
+        score++;
+
+       
